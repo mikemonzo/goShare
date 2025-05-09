@@ -1,24 +1,17 @@
 package main
 
 import (
-	"log"
-	"os"
-
-	"github.com/joho/godotenv"
+	"github.com/mikemonzo/goshare/internal/shared/logger"
+	"github.com/mikemonzo/goshare/pkg/config"
 )
 
 func main() {
+	logger.InitLogger()
 	// Load .env
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file")
-	}
+	cfg := config.LoadConfig()
 
-	port := os.Getenv("APP_PORT")
-	if port == "" {
-		port = "8080" // Default port
-	}
+	logger.Log.Infof("Starting server on port %s...", cfg.AppPort)
 
-	log.Printf("Starting server on port %s...", port)
 	// TODO: Initialize routes, servicies, DB, middlewares, etc.
 
 }
