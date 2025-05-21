@@ -1,0 +1,39 @@
+services:
+    backend:
+        build:
+            context: ../../backend
+            dockerfile: Dockerfile
+        container_name: goshare_backend
+        ports:
+            - "8000:8000"
+        environment:
+            - APP_PORT=8080
+            - DB_HOST=postgres
+            - DB_PORT=5432
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_NAME=goshare
+            - JWT_SECRET=mi_clave_supersecreta
+        depends_on:
+            postgres:
+                condition: service_healthy
+
+    postgres:
+        image: postgres:latest
+        container_name: goshare_postgres
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=goshare
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+volumes:
+    postgres_data:

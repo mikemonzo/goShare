@@ -1,6 +1,10 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type Tenant struct {
 	ID        uuid.UUID
@@ -9,4 +13,11 @@ type Tenant struct {
 	Branding  string
 	CreatedAt int64
 	UpdatedAt int64
+}
+
+func (t *Tenant) Validate() error {
+	if t.Name == "" {
+		return fmt.Errorf("name is required")
+	}
+	return nil
 }
